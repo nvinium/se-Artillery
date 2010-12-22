@@ -35,7 +35,7 @@ local xmove = 0
 local ymove = -.5
 local push = -.01
 
-function doplanet( event )
+function doPlanet( event )
 	if bullet.isAwake  then
 		
 		for i=1, #planets do 
@@ -45,11 +45,11 @@ function doplanet( event )
 			local xmove = (planet.x-bullet.x) * power
 			local ymove = (planet.y-bullet.y) * power
 
-
-			print("xmove is : ".. xmove)
-			print("ymove is : ".. ymove)
-			print("power is : ".. power)
-			print("--------")
+			-- 
+			-- print("xmove is : ".. xmove)
+			-- print("ymove is : ".. ymove)
+			-- print("power is : ".. power)
+			-- print("--------")
 			bullet:applyForce( xmove, ymove+push, bullet.x, bullet.y )
 			draw_trail()
 		end
@@ -66,7 +66,11 @@ end
 function fireCanon(event)
 	bullet.isAwake = true
 	print( "Bullet Fired!" )
-	bullet:applyLinearImpulse( 0, -.1, bullet.x, bullet.y )
+		touch_dist = distance( event, bullet )
+		init_power = tmax/touch_dist / strength
+		xmove = (event.x-bullet.x) * init_power
+		ymove = (event.y-bullet.y) * init_power
+		bullet:applyLinearImpulse( xmove, ymove, bullet.x, bullet.y )
 end
 
 function onBulletCollision(event)
@@ -79,6 +83,6 @@ function onBulletCollision(event)
 	end
 end
 
-canon:addEventListener( "tap", fireCanon )
+Runtime:addEventListener( "tap", fireCanon )
 bullet:addEventListener( "collision", onBulletCollision )
-Runtime:addEventListener( "enterFrame", doplanet )
+Runtime:addEventListener( "enterFrame", doPlanet )
