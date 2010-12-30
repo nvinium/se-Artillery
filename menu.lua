@@ -48,6 +48,12 @@ function new()
 	localGroup:insert(helpButton)
 	
 	local aboutButton = display.newImage("images/buttons/about.png")
+	local function aboutPressed ( event )
+		if event.phase == "ended" then
+			director:changeScene("about", "fade", "green")
+		end
+	end
+	aboutButton:addEventListener("touch", aboutPressed)	
 	aboutButton.x = 160
 	aboutButton.y = 230	
 	localGroup:insert(aboutButton)	
