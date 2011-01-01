@@ -3,7 +3,19 @@ local physics = require( "physics" )
 module(..., package.seeall)
 
 -- Main function - MUST return a display.newGroup()
-function new()
+function new()	
+	local gameGroup = display.newGroup()
+	
+	-- add a back to main menu rectangle
+	quitButton = display.newRect( display.contentWidth - 20, display.contentHeight - 20, 20, 20)
+	quitButton:setFillColor( 50, 50, 50)
+	gameGroup:insert(quitButton)
+	local function quitTouched ( event )
+		if event.phase == "ended" then
+			director:changeScene("menu", "fade")
+		end
+	end
+	quitButton:addEventListener("touch", quitTouched)	
 	
 	physics.start()
 	physics.setGravity( 0, 0 )
@@ -11,8 +23,7 @@ function new()
 	local canon_size = 20
 	local canon = display.newRect( display.contentWidth/2, display.contentHeight - canon_size, canon_size, canon_size )
 	canon:setFillColor( 100, 200, 300 )
-
-
+	gameGroup:insert(canon)
 
 	local planets = {}
 	local bullets = {}
@@ -20,6 +31,7 @@ function new()
 	for planet_count=1, 3 do 
 		local planet = display.newCircle( math.random(0, display.contentWidth), math.random(0, display.contentHeight), 20 )
 		planet:setFillColor( math.random(0,255), math.random(0,255), math.random(0,255) )
+		gameGroup:insert(planet)
 		physics.addBody( planet, "static", { friction=0.5, radius=20, friction=.9 } )
 		planets[#planets + 1] = planet
 	end
@@ -68,6 +80,7 @@ function new()
 			j = #bullet.trails+1
 			bullet.trails[j] = display.newCircle( bullet.x, bullet.y, 1 )
 			bullet.trails[j]:setFillColor(240, 200, 190)
+			gameGroup:insert(bullet.trails[j])
 			if #bullet.trails > 100 then
 				bullet.trails[j-100]:removeSelf()
 			end
@@ -77,6 +90,7 @@ function new()
 	function fireCanon(event)
 		i = #bullets + 1
 		bullets[i] = display.newCircle( display.contentWidth/2 + canon_size/2, 450, 5 )
+		gameGroup:insert(bullets[i])
 		bullet = bullets[i]
 		bullet.trails = {}
 		bullet:setFillColor( 150, 100, 300 )
@@ -97,6 +111,7 @@ function new()
 		print("boom")
 		if event.phase == 'began' then
 			colissionMark = display.newCircle( self.x, self.y, 5 )
+			gameGroup:insert(colissionMark)
 			colissionMark:setFillColor( 255, 0, 0 )
 		elseif event.phase == 'ended' then
 			print( "Ball ".. "Colission at X,Y : ".. self.x.. "," ..self.y )
@@ -106,4 +121,5 @@ function new()
 	Runtime:addEventListener( "tap", fireCanon )
 	Runtime:addEventListener( "enterFrame", doPlanet )
 	
+	return gameGroup	
 end
