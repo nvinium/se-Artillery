@@ -24,6 +24,9 @@ function new()
 	end
 	background:addEventListener("touch",touched)
 	
+	unloadMe = function()
+	end	
+	
 	-- MUST return a display.newGroup()
 	return localGroup
 end

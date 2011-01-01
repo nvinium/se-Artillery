@@ -24,6 +24,10 @@ function new()
 	end
 	background:addEventListener("touch",touched)
 	
+	unloadMe = function()
+		print("Cleaning up...")
+	end	
+	
 	-- MUST return a display.newGroup()
 	return localGroup
 end

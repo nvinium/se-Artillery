@@ -121,5 +121,16 @@ function new()
 	Runtime:addEventListener( "tap", fireCanon )
 	Runtime:addEventListener( "enterFrame", doPlanet )
 	
+	unloadMe = function()
+		print( "Cleaning up..." )
+		physics.stop()
+
+		Runtime:removeEventListener( "tap", fireCanon )
+		Runtime:removeEventListener( "enterFrame", doPlanet )
+						
+		-- planets = nil
+		-- bullets = nil
+	end	
+	
 	return gameGroup	
 end

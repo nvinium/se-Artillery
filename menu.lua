@@ -58,6 +58,10 @@ function new()
 	aboutButton.y = 230	
 	localGroup:insert(aboutButton)	
 					
+					
+	unloadMe = function()
+	end
+						
 	-- MUST return a display.newGroup()
 	return localGroup
 end

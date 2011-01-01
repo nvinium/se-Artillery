@@ -398,9 +398,16 @@ function director:changeScene(nextScene,
 	-- Clean up memory
 	-----------------------------------
 	
-	if lastScene then
-		package.loaded[lastScene] = nil
-	end
+  if lastScene then
+	  -- Custom clean function (unloadMe)
+	  if string.lower(lastScene) ~= "main" then
+	  	package.loaded[lastScene].unloadMe()
+	  end
+	  package.loaded[lastScene] = nil
+  end	
+	-- if lastScene then
+	-- 	package.loaded[lastScene] = nil
+	-- end
 	lastScene = nextScene
 	collectgarbage("collect")
 	
